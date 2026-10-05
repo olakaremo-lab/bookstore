@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,7 +48,9 @@ public class BookController {
         bookRepository.save(book);
         return "redirect:/booklist";
     }
+    
     @RequestMapping ("/delete/{id}")
+    @PreAuthorize("hasRole('Admin')")
     public String deleteBook(@PathVariable("id")long bookId){
         bookRepository.deleteById(bookId);
         return "redirect:/booklist";
@@ -61,6 +64,10 @@ public class BookController {
     @GetMapping("/books/{id}")
     public Optional<Book> findbook(@PathVariable("id") long id){
         return bookRepository.findById(id);
+    }
+    @RequestMapping ("/login")
+    public String login(){
+        return "login";
     }
 }
     
